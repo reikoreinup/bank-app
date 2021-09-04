@@ -2,6 +2,7 @@ package com.monese.bank.service;
 
 import com.monese.bank.domain.Account;
 import com.monese.bank.domain.Transaction;
+import com.monese.bank.domain.constants.ErrorMessage;
 import com.monese.bank.domain.constants.TransactionType;
 import com.monese.bank.exception.AccountNotFoundException;
 import com.monese.bank.exception.ValidationException;
@@ -32,6 +33,10 @@ public class TransactionService {
         TransactionsContainer transactionsContainer = new TransactionsContainer();
 
         Account account = accountService.findAccountByAccountNumber(accountNumber);
+
+        if (account == null) {
+            throw new AccountNotFoundException(String.format(ErrorMessage.ACCOUNT_DOESNT_EXIST.getDescription(), accountNumber));
+        }
 
         List<TransactionInfo> transactionInfos = transactionRepository
                 .findAllList(TransactionPredicate.byFromOrToAccount(account.getId())).stream()
@@ -65,19 +70,19 @@ public class TransactionService {
 
     private void validateInput(Account toAccount, Account fromAccount, TransactionInput transactionInput) {
         if (toAccount == null) {
-            throw new AccountNotFoundException(String.format("No account with number %s", transactionInput.getToAccountNumber()));
+            throw new AccountNotFoundException(String.format(ErrorMessage.ACCOUNT_DOESNT_EXIST.getDescription(), transactionInput.getToAccountNumber()));
         }
 
         if (fromAccount == null) {
-            throw new AccountNotFoundException(String.format("No account with number %s", transactionInput.getFromAccountNumber()));
+            throw new AccountNotFoundException(String.format(ErrorMessage.ACCOUNT_DOESNT_EXIST.getDescription(), transactionInput.getFromAccountNumber()));
         }
 
         if (toAccount.getId().equals(fromAccount.getId())) {
-            throw new ValidationException("Accounts must be different");
+            throw new ValidationException(ErrorMessage.ACCOUNTS_NOT_DIFFERENT.getDescription());
         }
 
         if (fromAccount.getAmount().compareTo(transactionInput.getAmount()) < 0) {
-            throw new ValidationException(String.format("Insufficient funds for account number %s", transactionInput.getFromAccountNumber()));
+            throw new ValidationException(String.format(ErrorMessage.INSUFFICIENT_FUNDS.getDescription(), transactionInput.getFromAccountNumber()));
         }
     }
 

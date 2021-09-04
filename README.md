@@ -14,6 +14,13 @@ The application has multiple endpoints for conducting business logic.
 
 After starting the application, the documentation for these endpoints is available at `http://localhost:8080/bank/swagger-ui/`
 
+## Initial data
+
+On every start of the application, migration scripts will be run in order.
+
+Migration scripts initiate the database tables and insert two accounts.
+
+These account numbers are EE1 and EE2. Both have a starting balance of 1000.
 
 ## Testing
 
