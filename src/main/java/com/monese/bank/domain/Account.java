@@ -12,11 +12,8 @@ import java.math.BigDecimal;
 @SequenceGenerator(sequenceName = "account_id_seq", name = BaseEntity.SEQUENCE_NAME, allocationSize = 1)
 public class Account extends BaseEntity{
 
-    private String name;
+    private String accountNumber;
 
     private BigDecimal amount;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "person_id")
-    private Person person;
 }

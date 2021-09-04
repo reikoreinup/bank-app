@@ -7,9 +7,9 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-public class AccountOutput {
+public class AccountInfo {
 
     private BigDecimal amount;
-    private String name;
-    private String owner;
+
+    private String accountNumber;
 }
